@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Training</title>
 </head>
 <body>
-    @isset($name)
-    <h1>Hello</h1> 
-    <li>
-     <ul>    ben--</ul>
-     <ul>    ben--</ul>
-     <ul>    ben--</ul>
-     <ul>    ben--</ul>
-     <ul>    ben--</ul>
-     <ul>    ben--</ul>
-    </li>
- <p>The name is: {{ $name }}</p>
-    @endisset
+    <h1>
+        The list of tasks
+      </h1>
+      
+      <div>
+        @if (count($tasks))
+            @foreach ($tasks as $tasks)
+                <div>{{$tasks->title}}</div>
+            @endforeach    
+        @else
+          <div>There are no tasks!</div>     
+        @endif
+        {{-- @endforelse --}}
+      </div>
    
 </body>
 </html>
+
+   
+{{-- <a href="{{ route('tasks.show', ['id' => $task->id]) }}">{{ $task->title }}</a> --}}
+
+
