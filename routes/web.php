@@ -2,6 +2,7 @@
 
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CreateController;
 use App\Models\Task;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -15,11 +16,14 @@ use Illuminate\Http\Request;
 
     Route::get('/tasks', function ()  {
         return view('index', [
-          'tasks' =>  \App\Models\Task::latest()->where('completed', false)->get()
+          'tasks' => Task::latest()->paginate(10)
         ]);
     })->name('tasks.index');
+    
 
-    Route::view('/tasks/create', 'create');
+    // Route::view('/tasks/create', 'create')->name('tasks.create');
+
+    Route::get('/create', [CreateController::class, 'create'])->name('create');
 
     Route::get('/tasks/{tasks}/edit', function (Task $tasks)  {
         return view('edit', ['tasks' => $tasks]);
@@ -58,6 +62,21 @@ use Illuminate\Http\Request;
         return redirect()->route('tasks.show', ['tasks' => $tasks->id])
         ->with('success', "Task updated successfully!");
     })->name('tasks.update');
+
+    Route::delete('/tasks/{tasks}', function (Task $tasks) {
+
+        $tasks->delete();
+
+        return redirect()->route('tasks.index')
+        ->with('success', "Task deleted successfully!");
+    })->name('tasks.destroy');
+
+   
+    Route::put('tasks/{id}/toggle-complete', function(Task $tasks){
+    $tasks->toggleComplete();
+
+    return redirect()->back()->with('success', 'Task Updated successfully');
+    })->name('tasks.toggle-complete');
     
     // Route::get('/xxx', function () {
     //     return 'Hello';
